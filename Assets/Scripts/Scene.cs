@@ -26,7 +26,7 @@ public class Scene : MonoBehaviour
         Render();
         
         // Add additional visualisations to help debug things.
-        DebugVisualisations();
+        // DebugVisualisations();
     }
 
     private void DebugVisualisations()
@@ -64,6 +64,16 @@ public class Scene : MonoBehaviour
         for (x = 0; x < this.image.Width; x++) {
             for (y = 0; y < this.image.Height; y++) {
                 this.image.SetPixel(x, y, Color.black);
+
+                float normMidX = (x + 0.5f) / this.image.Width;
+                float normMidY = (y + 0.5f) / this.image.Height;
+                Ray currRay = new Ray(Vector3.zero, NormalizedImageToWorldCoord(normMidX, normMidY));
+
+                foreach (var sceneEntity in FindObjectsOfType<SceneEntity>()) {
+                    if (sceneEntity.Intersect(currRay) != null) {
+                        this.image.SetPixel(x, y, sceneEntity.Color());
+                    }
+                }
             }
         }
 
