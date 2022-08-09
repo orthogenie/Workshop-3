@@ -35,13 +35,38 @@ public class Scene : MonoBehaviour
 
         // Image plane "corner" rays first (frustum edges).
         this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(0f, 0f)), Color.blue);
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(0f, 1f)), Color.blue);
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(1f, 0f)), Color.blue);
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(1f, 1f)), Color.blue);
         
         // Add more rays to visualise here...
+        int x;  // pixel width
+        int y;  // pixel height
+
+        for (x = 0; x < this.image.Width; x++) {
+            for (y = 0; y < this.image.Height; y++) {
+                float normMidX = (x + 0.5f) / this.image.Width;
+                float normMidY = (y + 0.5f) / this.image.Height;
+
+                this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(normMidX, normMidY)), Color.white);
+            }
+        }
+
+        
     }
 
     private void Render()
     {
         // Render the image here...
+        int x;
+        int y;
+
+        for (x = 0; x < this.image.Width; x++) {
+            for (y = 0; y < this.image.Height; y++) {
+                this.image.SetPixel(x, y, Color.black);
+            }
+        }
+
     }
 
     private Vector3 NormalizedImageToWorldCoord(float x, float y)
